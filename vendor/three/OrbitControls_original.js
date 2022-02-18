@@ -75,7 +75,7 @@ const OrbitControls = function ( object, domElement ) {
 	this.enableKeys = true;
 
 	// The four arrow keys
-	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40, PLUS: 187, MINUS: 189 };
+	this.keys = { LEFT: 37, UP: 38, RIGHT: 39, BOTTOM: 40 };
 
 	// Mouse buttons
 	this.mouseButtons = { ORBIT: THREE.MOUSE.LEFT, ZOOM: THREE.MOUSE.MIDDLE, PAN: THREE.MOUSE.RIGHT };
@@ -538,7 +538,7 @@ const OrbitControls = function ( object, domElement ) {
 
 	}
 
-	function handleKeyDownPan( event ) {
+	function handleKeyDown( event ) {
 
 		//console.log( 'handleKeyDown' );
 
@@ -791,72 +791,11 @@ const OrbitControls = function ( object, domElement ) {
 
 	function onKeyDown( event ) {
 
-		if ( scope.enabled === false || scope.enableKeys === false) return;
+		if ( scope.enabled === false || scope.enableKeys === false || scope.enablePan === false ) return;
 
-        switch ( event.keyCode ) {
-            case scope.keys.PLUS:
-            case scope.keys.MINUS:
-                if ( scope.enableZoom === false ) return;
+		handleKeyDown( event );
 
-                break;
-            case scope.keys.UP:
-            case scope.keys.BOTTOM:
-            case scope.keys.LEFT:
-            case scope.keys.RIGHT:
-                if (event.shiftKey) {
-                    if ( scope.enablePan === false ) return;
-
-                    handleKeyDownPan(event);
-                } else {
-                    if ( scope.enableRotate === false ) return;
-
-                    handleKeyDownRotate(event);
-                }
-            break;
-        }
 	}
-
-
-    function handleKeyDownRotate(event) {
-
-		console.log( 'handleKeyDownRotate' );
-
-		var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
-        var cx = element.clientWidth / 2;
-        var cy = element.clientHeight / 2;
-        var mx = cx;
-        var my = cy;
-
-        rotateStart.set( cx, cy );
-
-        switch ( event.keyCode ) {
-            case scope.keys.UP:
-                my += scope.keyPanSpeed;
-                break;
-            case scope.keys.BOTTOM:
-                my -= scope.keyPanSpeed;
-                break;
-            case scope.keys.LEFT:
-                mx += scope.keyPanSpeed;
-                break;
-            case scope.keys.RIGHT:
-                mx -= scope.keyPanSpeed;
-                break;
-        }
-        
-		rotateEnd.set( mx, my );
-
-		rotateDelta.subVectors( rotateEnd, rotateStart ).multiplyScalar( scope.rotateSpeed );
-
-		scope.rotateLeft( 2 * Math.PI * rotateDelta.x / element.clientHeight ); // yes, height
-
-		scope.rotateUp( 2 * Math.PI * rotateDelta.y / element.clientHeight );
-
-		rotateStart.copy( rotateEnd );
-
-		scope.update();
-
-    }
 
 	function onTouchStart( event ) {
 
