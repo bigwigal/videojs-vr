@@ -522,7 +522,7 @@ const OrbitControls = function ( object, domElement ) {
 
 	function handleMouseWheel( event ) {
 
-		// console.log( 'handleMouseWheel' );
+		console.log( 'handleMouseWheel' );
 
 		if ( event.deltaY < 0 ) {
 
@@ -821,38 +821,43 @@ const OrbitControls = function ( object, domElement ) {
 
 		console.log( 'handleKeyDownRotate' );
 
-		var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
-        var cx = element.clientWidth / 2;
-        var cy = element.clientHeight / 2;
-        var mx = cx;
-        var my = cy;
-
-        rotateStart.set( cx, cy );
+        rotateStart.set( 0, 0 );
 
         switch ( event.keyCode ) {
+
             case scope.keys.UP:
-                my += scope.keyPanSpeed;
-                break;
-            case scope.keys.BOTTOM:
-                my -= scope.keyPanSpeed;
-                break;
-            case scope.keys.LEFT:
-                mx += scope.keyPanSpeed;
-                break;
-            case scope.keys.RIGHT:
-                mx -= scope.keyPanSpeed;
-                break;
+
+				rotateEnd.set( 0, scope.keyPanSpeed );
+
+				break;
+
+			case scope.keys.BOTTOM:
+
+				rotateEnd.set( 0, - scope.keyPanSpeed );
+
+				break;
+
+			case scope.keys.LEFT:
+
+				rotateEnd.set( scope.keyPanSpeed, 0 );
+
+				break;
+
+			case scope.keys.RIGHT:
+
+				rotateEnd.set( - scope.keyPanSpeed, 0 );
+
+				break;
+
         }
         
-		rotateEnd.set( mx, my );
-
 		rotateDelta.subVectors( rotateEnd, rotateStart ).multiplyScalar( scope.rotateSpeed );
+
+		var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
 
 		scope.rotateLeft( 2 * Math.PI * rotateDelta.x / element.clientHeight ); // yes, height
 
 		scope.rotateUp( 2 * Math.PI * rotateDelta.y / element.clientHeight );
-
-		rotateStart.copy( rotateEnd );
 
 		scope.update();
 
