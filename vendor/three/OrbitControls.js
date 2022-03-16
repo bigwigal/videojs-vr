@@ -803,6 +803,8 @@ const OrbitControls = function ( object, domElement ) {
             case scope.keys.BOTTOM:
             case scope.keys.LEFT:
             case scope.keys.RIGHT:
+                event.preventDefault();
+
                 if (event.shiftKey) {
                     if ( scope.enablePan === false ) return;
 
